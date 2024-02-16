@@ -34,7 +34,8 @@ namespace APIfilms.Controllers
 
         // GET: api/Utilisateurs/5
         [HttpGet]
-        [ActionName("GetUtilisateurById")]
+        [ActionName("GetById")]
+        [Route("[action]/{id}")]
         public async Task<ActionResult<Utilisateur>> GetUtilisateurById(int id)
         {
           if (_context.Utilisateurs == null)
@@ -118,6 +119,7 @@ namespace APIfilms.Controllers
         }
 
         [HttpGet]
+        [Route("[action]/{email}")]
         [ActionName("GetUtilisateurByEmail")]
         public async Task<ActionResult<Utilisateur>> GetUtilisateurByEmail(string email)
         {
@@ -125,7 +127,7 @@ namespace APIfilms.Controllers
             {
                 return NotFound();
             }
-            var utilisateur = await _context.Utilisateurs.FindAsync(email);
+            var utilisateur = await _context.Utilisateurs.FirstOrDefaultAsync(f => f.Mail == email);
 
             if (utilisateur == null)
             {
