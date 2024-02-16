@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
+using System.ComponentModel.DataAnnotations;
 
 namespace APIfilms.Models.EntityFramework
 {
@@ -13,30 +9,33 @@ namespace APIfilms.Models.EntityFramework
     {
         public Film()
         {
-            
+            NotesFilm = new HashSet<Notation>();
         }
 
+        [Key]
+        //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("flm_id")]
-        public int Flm_id { get; set; }
+        public int FilmId { get; set; }
 
+        [Required]
         [Column("flm_titre")]
         [StringLength(100)]
-        public string Flm_titre { get; set; }
+        public string Titre { get; set; } = null!;
 
-        [Column("flm_resume", TypeName = "text")]
-        public string Flm_resume { get; set; }
+        [Column("flm_resume")]
+        public string? Resume { get; set; }
 
-        [Column("flm_datesortie", TypeName = "Date")]
-        public DateTime Flm_datesortie { get; set; }
+        [Column("flm_datesortie", TypeName = "date")]
+        public DateTime? DateSortie { get; set; }
 
-        [Column("flm_duree", TypeName = "numeric(3,0)")]
-        public decimal Flm_duree { get; set; }
+        [Column("flm_duree", TypeName = "numeric(3, 0)")]
+        public decimal? Duree { get; set; }
 
         [Column("flm_genre")]
         [StringLength(30)]
-        public string Flm_genre { get; set; }
+        public string? Genre { get; set; }
 
-        [InverseProperty("NotesFilm")]
-        public virtual  ICollection<Notation> NotesFilm { get; set; }
+        [InverseProperty(nameof(Notation.FilmNote))]
+        public virtual ICollection<Notation> NotesFilm { get; set; }
     }
 }
