@@ -1,5 +1,7 @@
+using APIfilms.Models.DataManager;
 using APIfilms.Models.EntityFramework;
 using Microsoft.EntityFrameworkCore;
+using static APIfilms.Models.Repository.IDataRepository;
 
 namespace APIfilms
 {
@@ -18,7 +20,9 @@ namespace APIfilms
 
             builder.Services.AddDbContext<FilmRatingsDBContext>(options =>
                 options.UseNpgsql(builder.Configuration.GetConnectionString("FilmRatingsDbContext")));
-
+            
+            builder.Services.AddScoped<IDataRepository<Utilisateur>, UtilisateurManager>();
+            
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
