@@ -26,7 +26,7 @@ namespace APIfilms.Controllers
         [ActionName("GetUtilisateurs")]
         public async Task<ActionResult<IEnumerable<Utilisateur>>> GetUtilisateurs()
         {
-            return dataRepository.GetAll();
+            return await dataRepository.GetAllAsync();
         }
 
         // GET: api/Utilisateurs/5
@@ -35,7 +35,7 @@ namespace APIfilms.Controllers
         [Route("[action]/{id}")]
         public async Task<ActionResult<Utilisateur>> GetUtilisateurById(int id)
         {
-            var utilisateur = dataRepository.GetById(id);
+            var utilisateur = await dataRepository.GetByIdAsync(id);
             //var utilisateur = await _context.Utilisateurs.FindAsync(id);
 
             if (utilisateur == null)
@@ -56,14 +56,14 @@ namespace APIfilms.Controllers
                 return BadRequest();
             }
 
-            var userToUpdate = dataRepository.GetById(id);
+            var userToUpdate = await dataRepository.GetByIdAsync(id);
             if (userToUpdate == null)
             {
                 return NotFound();
             }
             else
             {
-                dataRepository.Update(userToUpdate.Value, utilisateur);
+                dataRepository.UpdateAsync(userToUpdate.Value, utilisateur);
                 return NoContent();
             }
         }
@@ -77,7 +77,7 @@ namespace APIfilms.Controllers
             {
                 return BadRequest(ModelState);
             }
-            dataRepository.Add(utilisateur);
+            dataRepository.AddAsync(utilisateur);
 
             return CreatedAtAction("GetUtilisateur", new { id = utilisateur.UtilisateurId }, utilisateur);
         }
@@ -86,12 +86,12 @@ namespace APIfilms.Controllers
         [HttpDelete("{email}")]
         public async Task<IActionResult> DeleteUtilisateur(int id)
         {
-            var utilisateur = dataRepository.GetById(id);
+            var utilisateur = await dataRepository.GetByIdAsync(id);
             if (utilisateur == null)
             {
                 return NotFound();
             }
-            dataRepository.Delete(utilisateur.Value);
+            dataRepository.DeleteAsync(utilisateur.Value);
             return NoContent();
         }
 
@@ -100,14 +100,11 @@ namespace APIfilms.Controllers
         [ActionName("GetUtilisateurByEmail")]
         public async Task<ActionResult<Utilisateur>> GetUtilisateurByEmail(string email)
         {
-            var utilisateur = dataRepository.GetByString(email);
-            //var utilisateur = await _context.Utilisateurs.FirstOrDefaultAsync(e => e.Mail.ToUpper() == email.ToUpper());
-
+            var utilisateur = await dataRepository.GetByStringAsync(email);
             if (utilisateur == null)
             {
                 return NotFound();
             }
-
             return utilisateur;
         }
     }
